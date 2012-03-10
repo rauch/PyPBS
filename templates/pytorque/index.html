@@ -1,0 +1,18 @@
+{% extends "pytorque/base.html" %}
+
+{% block title %}
+    SPSU site
+{% endblock %}
+
+{% block content %}
+
+    <div id="index_content">
+        <p> <a href="/pytorque/index/"> Home </a> </p>
+        <p> <a href="/pytorque/browse/"> File Managing </a> </p>
+        <p> <a href="/pytorque/browse/"> PBS Queue Information </a> </p>
+        <p> <a href="/pytorque/submitScript/"> Script Generation and Submission </a> </p>
+    
+        <b>You are: {{ userName }}</b>
+    </div>
+
+{% endblock %}

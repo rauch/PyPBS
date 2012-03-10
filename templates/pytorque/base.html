@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    {% block header %}
+        <title>{% block title %}SPSU site{% endblock %}</title>
+
+    {% endblock %}
+</head>
+
+<body>
+<!-- Container -->
+<div id="container">
+    <!-- main_panel -->
+    <div id="header">
+        <!-- Main actions -->
+        <div id="mainActions" align="center">
+            <b> <a href="/pytorque/index/"> Home </a> </b> ||
+        </div>
+    </div>
+
+    <!-- body -->
+    <div id="body">
+        <!-- File system browser -->
+        <div id="sidebar">
+            {% block sidebar %}
+
+                {% if jsonTree %}
+
+                    <script type="text/javascript">
+
+                        Event.observe(window, "load", function(event) {
+
+                            fileSystemTree = new Brq.TreeTable('{{ jsonTree|escapejs }}'.evalJSON(), $("sidebar"), {
+                                columnTitles: [
+                                    "Home Directory"
+                                ],
+                                index: false,
+                                zebra: true
+                            });
+                        });
+                    </script>
+                {% else %}
+                    <div align="center">
+                        <b> Home Directory </b>
+                    </div>
+                {% endif %}
+            {% endblock %}
+        </div>
+        <!-- End file browser -->
+
+        <!-- Content -->
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+        <!-- END Content -->
+
+        <form id="formToUpload" method="post" action="/pytorque/fileUpload">
+            <input id="currentDirectoryInput" name="currentDirectory" value="" type="hidden"/>
+        </form>
+
+        <form id="formToDownload" method="post" action="/pytorque/fileDownload">
+            <input id="currentFileInput" name="currentFile" value="" type="hidden"/>
+        </form>
+
+    </div>
+</div>
+</body>
+</html>
