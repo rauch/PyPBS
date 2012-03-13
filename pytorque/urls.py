@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('pytorque.views',
-    (r'^$', 'index'),
+    (r'^$', 'central_dispatch_view'),
     (r'^login/$', 'login'),
     (r'^logout/$', 'logout'),
 

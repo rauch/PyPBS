@@ -106,10 +106,13 @@ ROOT_URLCONF = 'PyPBS.urls'
 
 FORCE_SCRIPT_NAME=''
 
-LOGIN_URL = '/pytorque/login'
-LOGOUT_URL = '/pytorque/logout'
+#LOGIN_URL = '/pytorque/login'
+#LOGOUT_URL = '/pytorque/logout'
+LOGIN_REDIRECT_URL = '/pytorque/'
 
 TEMPLATE_DIRS = (os.path.join(ROOT_PATH, "templates"),)
+
+AUTH_PROFILE_MODULE = 'PyPBS.UserProfile'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -117,7 +120,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-#    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
