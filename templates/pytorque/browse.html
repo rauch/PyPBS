@@ -1,0 +1,101 @@
+{% extends "pytorque/base.html" %}
+
+{% block title %}
+    PyTorque
+{% endblock %}
+
+{% block content %}
+
+    <div class="center">
+        <b>You are: {{ userName }}</b>
+
+        <div id="fileTree" class="jstree">
+            <script type="text/javascript">
+                $(function () {
+                    jQuery("#fileTree")
+                            .jstree({
+//                                core: {initially_open: [1]},
+                                "types":{
+//                                    do not need depth and children count checking
+                                    "max_depth":-2,
+                                    "max_children":-2,
+
+                                    "types":{
+                                        // The default type
+                                        "default":{
+                                            "valid_children":"all"
+                                        },
+                                        // The `folder` type
+                                        "folder":{
+                                            // can have files and other folders inside of it, but NOT `drive` nodes
+                                            "valid_children":[ "default", "folder", "file" ]
+                                        },
+                                        // The `file` type
+                                        "file":{
+                                            "icon":{
+                                                "image":"/media/images/icon-leaf.png"
+                                            },
+                                            "valid_children":"none",
+                                            "max_depth":0
+                                        }
+                                    }
+                                },
+                                "grid":{
+                                    columns:[
+                                        {cellClass:"colName", width:500, header:"Name"},
+                                        {cellClass:"colSize", width:150, header:"Size (KB)", value:"size", title:"size"},
+                                        {cellClass:"colDate", width:200, header:"Last Modified Date", value:"dateModified", title:"dateModified"}
+                                    ],
+                                    resizable:true,
+                                    width:25
+                                },
+                                "json_data":{
+                                    "ajax":{
+                                        "type":'GET',
+                                        "url":"{{ "/user/"|add:userName|add:"/browse/get_children"}}",
+                                        "data":function (node) {
+                                            var nodeId = "";
+                                            if (node == -1) {
+                                            }
+                                            else {
+                                                nodeId = node.attr('id');
+                                            }
+
+                                            return {id:nodeId};
+                                        },
+                                        "success":function (new_data) {
+                                            return new_data.children;
+                                        }
+                                    }
+                                },
+                                'contextmenu':{
+                                    'items':customMenu
+                                },
+                                "ui":{
+                                    "select_limit":1
+                                },
+                                "themes":{
+                                    "theme":"classic",
+                                    "dots":true,
+                                    "icons":true
+                                },
+                                plugins:[ "json_data", "types", "grid", "contextmenu", "crrm", "themes", "ui" ]
+                            })/*.bind("select_node.jstree",
+                            function (e, data) {
+                                alert(data.rslt.obj.attr("id"));
+                            })*/;
+                });
+            </script>
+        </div>
+        <form id="formToUpload" method="post" action="{{ "/user/"|add:userName|add:"/browse/upload"}}">
+            {% csrf_token %}
+            <input id="currentDirectoryInput" name="currentDirectory" value="" type="hidden"/>
+        </form>
+
+        <form id="formToDownload" method="post" action="{{ "/user/"|add:userName|add:"/browse/download"}}">
+            {% csrf_token %}
+            <input id="currentFileInput" name="currentFile" value="" type="hidden"/>
+        </form>
+    </div>
+
+{% endblock %}

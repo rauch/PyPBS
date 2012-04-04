@@ -108,7 +108,7 @@ FORCE_SCRIPT_NAME=''
 
 #LOGIN_URL = '/pytorque/login'
 #LOGOUT_URL = '/pytorque/logout'
-LOGIN_REDIRECT_URL = '/pytorque/'
+LOGIN_REDIRECT_URL = '/'
 
 TEMPLATE_DIRS = (os.path.join(ROOT_PATH, "templates"),)
 
@@ -158,7 +158,7 @@ LOGGING = {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': 'logs/pytorque.log',
+            'filename': os.path.join(ROOT_PATH, 'logs/pytorque.log'),
             'maxBytes':'1024',
             'backupCount': '3',
         },
