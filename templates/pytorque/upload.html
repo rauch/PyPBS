@@ -1,0 +1,23 @@
+{% extends "pytorque/base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    PyTroque uploading
+{% endblock %}
+
+
+{% block content %}
+    <div class="center upload">
+        <p style="font-size: 28px;">Please, select file to upload:</p>
+
+        <form id="fileForm" enctype="multipart/form-data" method="post"
+              action={{ "/user/"|add:userName|add:"/browse/upload" }}>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input id="djangoSubmit" type="submit" value="Submit"/>
+
+            <input type="hidden" name="currentDirectory" value="{{ currentDirectory }}"/>
+        </form>
+    </div>
+{% endblock %}

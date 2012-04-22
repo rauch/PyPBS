@@ -1,0 +1,381 @@
+﻿/******************************************************************************
+ * Name        : jtable jQuery plug-in 'empty' theme
+ * Author      : Halil İbrahim KALKAN
+ * Description : This file is created to expose css classes that are used by
+ *               jtable plug-in. It does not defines any style almost.
+ *****************************************************************************/
+
+/* MAIN ELEMENTS *************************************************************/
+
+/* Main container of all elements those are created by jtable plugin */
+div.jtable-main-container
+{
+    /* no additional style */    
+}
+
+/* A div that contains title of the table (if any title supplied in options) */
+div.jtable-title 
+{
+    /* no additional style */    
+}
+
+/* A div that is in jtable-title and contains the title text */
+div.jtable-title div.jtable-title-text
+{
+    /* no additional style */        
+}
+
+/* Main table tag */
+table.jtable
+{
+    width: 100%;
+}
+
+/* A panel below the table that contains some commands */
+div.jtable-bottom-panel
+{
+    /* no additional style */        
+}
+
+/* HEADER ********************************************************************/
+
+/* All header cells in the table */
+table.jtable th
+{
+    /* no additional style */    
+}
+
+/* All header cells except command column header cell */
+table.jtable th.jtable-column-header
+{
+    /* no additional style */
+}
+
+/* Column header container in header cells */
+table.jtable th.jtable-column-header div.jtable-column-header-container
+{
+    /* no additional style */
+}
+
+/* Header text in column header cell */
+table.jtable th.jtable-column-header span.jtable-column-header-text
+{
+    /* no additional style */
+}
+
+/* Command column header cell */
+table.jtable th.jtable-command-column-header
+{
+    /* no additional style */
+}
+
+/* SORTING *******************************************************************/
+
+/* A sortable column header */
+table.jtable th.jtable-column-header-sortable
+{
+    cursor: pointer;
+}
+
+/* Sorting icon span in the sortable table column header */
+table.jtable th.jtable-column-header-sortable div.jtable-column-header-container
+{
+    /* no additional style */
+}
+
+/* Ascending sorted icon in the table column header */
+table.jtable th.jtable-column-header-sorted-asc div.jtable-column-header-container
+{
+    /* no additional style */
+}
+
+/* Descending sorted icon in the table column header */
+table.jtable th.jtable-column-header-sorted-desc div.jtable-column-header-container
+{
+    /* no additional style */
+}
+
+/* PAGING ********************************************************************/
+
+/* A container for page list */
+.jtable-page-list 
+{
+    display: inline-block;   
+    margin: 2px;
+}
+
+/* Page numbers */
+.jtable-page-number,
+/* dots between numbers (...) */
+.jtable-page-number-space,
+/* First page link */
+.jtable-page-number-first,
+/* Last page link */
+.jtable-page-number-last,
+/* Previous page link */
+.jtable-page-number-previous,
+/* Next page link */
+.jtable-page-number-next,
+/* Active page link */
+.jtable-page-number-active
+{
+    display: inline-block;
+    margin-right: 1px;
+    padding: 2px;
+}
+
+/* Page numbers */
+.jtable-page-number,
+/* First page link */
+.jtable-page-number-first,
+/* Last page link */
+.jtable-page-number-last,
+/* Previous page link */
+.jtable-page-number-previous,
+/* Next page link */
+.jtable-page-number-next
+{
+    cursor: pointer;
+}
+
+/* Paging informations */
+.jtable-page-info
+{
+    display: inline-block;
+    margin-left: 5px;
+    padding: 2px;
+}
+
+/* ROWS **********************************************************************/
+
+/* All rows in the table */
+table.jtable tr
+{
+    /* no additional style */    
+}
+
+/* Command column in all rows */
+table.jtable tr td.jtable-command-column
+{
+    /* no additional style */
+}
+
+/* Even rows */
+table.jtable tr.jtable-row-even
+{
+    /* no additional style */
+}
+
+/* Command column in even rows */
+table.jtable tr.jtable-row-even td.jtable-command-column
+{
+    /* No additional style */
+}
+
+/* Style for 'no data available' row */
+table.jtable tr.jtable-no-data-row
+{
+    /* no additional style */
+}
+
+table.jtable tr.jtable-row-selected
+{
+    /* No additional style */
+}
+
+/* Style for a child row */
+table.jtable tr.jtable-child-row
+{
+    /* No additional style */      
+}
+
+/* ROW ANIMATIONS ***********************************************************/
+
+/* A 'new created row' style for animation */
+table.jtable tr.jtable-row-created
+{
+    background-color: #00FF89;
+}
+
+/* An 'updated row style' for animation */
+table.jtable tr.jtable-row-updated
+{
+    background-color: #00FFFF;
+}
+
+/* A 'deleting row style' for animation */
+table.jtable tr.jtable-row-deleting
+{
+    background-color: #FF0000;
+}
+
+/* CELLS *********************************************************************/
+
+/* All table cells in the table */
+table.jtable td
+{
+    /* No additional style */
+}
+
+/* COMMAND BUTTONS ***********************************************************/
+
+/* 'add new record' link */
+a.jtable-add-record
+{
+    /* No additional style */
+}
+
+/* All command buttons (delete/edit) */
+table.jtable .jtable-command-button
+{
+    /* No additional style */
+}
+
+/* span tag (that contains the command text) in all command buttons (delete/edit) */
+table.jtable .jtable-command-button span
+{
+    /* No additional style */
+}
+
+/* Edit command button */
+table.jtable .jtable-edit-command-button
+{
+    /* No additional style */
+}
+
+/* Delete command button */
+table.jtable .jtable-delete-command-button
+{
+    /* No additional style */
+}
+
+/* Table Close command button */
+.jtable-close-button
+{
+    /* No additional style */
+}
+
+/* FORMS *********************************************************************/
+
+/* A form to edit/create records */
+form.jtable-dialog-form
+{
+    /* No additional style */
+}
+
+/* A form to create records */
+form.jtable-create-form
+{
+    /* No additional style */
+}
+
+/* A form to edit records */
+form.jtable-edit-form
+{
+    /* No additional style */
+}
+
+/* FORM INPUT ELEMENTS *******************************************************/
+
+/* A div that contains a label (title) and input field */
+div.jtable-input-field-container
+{
+    /* No additional style */    
+}
+
+/* A div that contains title of input in create/edit forms */
+div.jtable-input-label
+{
+    /* No additional style */
+}
+
+/* A div that contains an input element in create/edit forms */
+div.jtable-input
+{
+    /* No additional style */
+}
+
+/* A div that contains a date input element in create/edit forms */
+div.jtable-date-input
+{
+    /* No additional style */
+}
+
+/* A div that contains a text input element in create/edit forms */
+div.jtable-text-input
+{
+    /* No additional style */
+}
+
+/* A div that contains a textarea input element in create/edit forms */
+div.jtable-textarea-input textarea
+{
+    width: 300px;
+}
+
+/* A div that contains a password input element in create/edit forms */
+div.jtable-password-input
+{
+    /* No additional style */
+}
+
+/* A div that contains a drop down list (combobox) element in create/edit forms */
+div.jtable-dropdown-input
+{
+    /* No additional style */
+}
+
+/* A div that contains a radio button list in create/edit forms */
+div.jtable-radiobuttonlist-input
+{
+    /* No additional style */
+}
+
+/* A div that contains a single radio button element */
+div.jtable-radio-input input, 
+/* A div that contains a checkbox element */
+div.jtable-checkbox-input input, 
+/* A span that contains text that can be clicked to set radio button's or checkbox's state */
+span.jtable-option-text-clickable
+{
+    cursor: pointer;
+}
+
+/* BUSY MESSAGE AND PANEL ****************************************************/
+
+/* A panel to block table UI while is busy */
+div.jtable-busy-panel-background
+{
+    z-index: 998;
+    position: absolute;
+    background-color: black;
+    opacity: 0.2;
+    filter: alpha(opacity=20); /* For IE8 and earlier */
+}
+
+/* A div that contains a message while table UI is busy */
+div.jtable-busy-message
+{
+    z-index: 999;
+    position: absolute;
+    margin: 5px;
+    padding: 5px;
+    color: black;
+    font-size: larger;
+    border: 1px solid black;
+    background-color: #CCCCCC;
+}
+
+/* MISC **********************************************************************/
+
+/* Style of the text that is shown in a delete confirmation dialog */
+.jtable-delete-confirm-message
+{
+    /* No additional style */    
+}
+
+/* Style of a row that is ready to remove from table (Deleted from server, waiting for deletion from table) */
+.jtable-row-ready-to-remove
+{
+    /* No additional style */    
+}

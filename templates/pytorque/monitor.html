@@ -1,0 +1,95 @@
+{% extends "pytorque/base.html" %}
+
+{% block title %}
+    PyTorque monitoring
+{% endblock %}
+
+{% block content %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#JobsContainer').jtable({
+                title:'Jobs',
+                openChildAsAccordion:true,
+                defaultDateFormat:'dd-mm-yy',
+                defaultSorting:'Name DESC',
+                selecting:true,
+//                selectingCheckboxes:true,
+                sorting:false,
+
+                actions:{
+                    listAction:"{{ "/user/"|add:userName|add:"/monitor/get_jobs"}}",
+                    createAction:"{{ "/user/"|add:userName|add:"/monitor/create_job"}}",
+                    updateAction:"{{ "/user/"|add:userName|add:"/monitor/update_job"}}",
+                    deleteAction:"{{ "/user/"|add:userName|add:"/monitor/delete_job"}}"
+                },
+                fields:{
+                    jobId:{
+                        key:true,
+                        title:'Job Id',
+                        width:'9%',
+                        create:false,
+                        edit:false,
+                        list:true
+                    },
+                    state:{
+                        title:'State',
+                        width:'3%'
+                    },
+                    user:{
+                        title:'User',
+                        width:'11%',
+                        create:false,
+                        edit:true,
+                        input:function (data) {
+                            if (data.record) {
+                                return '<input type="text" style="width:200px" value="' + data.record.user + '" />';
+                            } else {
+                                return '<input type="text" style="width:200px" value="enter your name here" />';
+                            }
+                        }
+                    },
+                    queue:{
+                        title:'Queue',
+                        width:'9%'
+                    },
+                    name:{
+                        title:'Name',
+                        width:'9%'
+                    },
+                    cpu_time:{
+                        title:'Req. CPU time',
+                        width:'14%',
+//                        type:'date',
+                        create:false,
+                        edit:false
+                    },
+                    n_p:{
+                        title:'N/P',
+                        width:'3%'
+                    },
+                    queued:{
+                        title:'Queued',
+                        width:'14%'
+                    },
+                    started:{
+                        title:'Started',
+                        width:'14%'
+                    },
+                    running_time:{
+                        title:'Running time',
+                        width:'12%'
+                    }
+                }
+            });
+
+            $('#JobsContainer').jtable('load', {csrfmiddlewaretoken:"{{ csrf_token }}"});
+        });
+    </script>
+
+    <div class="center">
+        <br>
+
+        <div id="JobsContainer"></div>
+    </div>
+
+{% endblock %}

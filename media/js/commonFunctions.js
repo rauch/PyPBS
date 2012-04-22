@@ -9,28 +9,28 @@
 function customMenu(node) {
     // The default set of all items
     var items = {
-        downloadItem:{ // The "rename" menu item
+        downloadItem:{ // The "download" menu item
             label:"Download",
             action:function () {
                 downloadItem(node)
             }
         },
-        uploadItem:{ // The "rename" menu item
+        uploadItem:{ // The "upload" menu item
             label:"Upload",
             action:function () {
-                alert("Upload")
+                createItem(node);
             }
         },
-        renameItem:{ // The "rename" menu item
-            label:"Rename",
-            action:function () {
-                this.rename(node);
-            }
-        },
+//        renameItem:{ // The "rename" menu item
+//            label:"Rename",
+//            action:function () {
+//                this.rename(node);
+//            }
+//        },
         deleteItem:{ // The "delete" menu item
             label:"Delete",
             action:function () {
-                alert("Delete")
+                removeItem(node);
             }
         }
     };
@@ -48,81 +48,54 @@ function customMenu(node) {
     return items;
 }
 
-function removeItem(node) {
-
-    var itemToRemove = node;
-
-    data = {
-        selectedItemFullName:itemToRemove["id"]
-    };
-    new Ajax.Request("/webtorque/ajax", {
-        method:'post',
-        parameters:data,
-        onSuccess:function (transport) {
-            var data = transport.responseJSON;
-
-            if (data["success"] == true) {
-                fileSystemTree.deleteNode(nodeId)
-            }
-            else if (data["success"] == false) {
-                alert("This item couldn't be removed!\r\n" + data["errorMessage"])
-            }
-        },
-        onFailure:function () {
-            alert("This item couldn't be removed!\r\n")
-        },
-        onComplete:function () {
-
-        }
-    });
-}
-
-function createItem(nodeId) {
-
-    var itemToAdd = fileSystemTree.getNodeById(nodeId);
-
-    var formToUpload = $("formToUpload");
-
-    $("currentDirectoryInput").value = itemToAdd["fullName"];
-
-    formToUpload.submit()
-}
-
 function downloadItem(node) {
-
     var itemToDownload = node;
-
     var formToDownload = $("#formToDownload");
-
     $("#currentFileInput").val(itemToDownload.attr("id"));
 
     formToDownload.submit()
 }
 
+function createItem(node) {
+    var formToUpload = $("#formToUpload");
+    $("#currentDirectoryInput").val(node.attr("id"));
 
-function createItemDir() {
-
-    var isDirectoryCb = $("isDirectoryCb");
-    if (isDirectoryCb["value"]) {
-        $("directoryForm").submit()
-    } else {
-        $("fileForm").submit()
-    }
+    formToUpload.submit()
 }
 
-function changeFileType() {
-
-    var isDirectoryCb = $("isDirectoryCb");
-    if (isDirectoryCb["checked"]) {
-        $("mySubmit").setStyle({display:"block"})
-        $("djangoSubmit").setStyle({display:"none"})
-        $("directoryName").disabled = false;
-    } else {
-        $("mySubmit").setStyle({display:"none"})
-        $("djangoSubmit").setStyle({display:"block"})
-        $("directoryName").disabled = "disabled";
-    }
-
+function showInfo(text) {
+    $(".info").fadeIn("fast", function () {
+        $(".info").html(text);
+        setTimeout(function () {
+            $('.info').fadeOut(3000);
+        }, 4000);
+    });
 }
 
+function showSuccess(text) {
+    $(".success").fadeIn("fast", function () {
+        $(".success").html(text);
+        setTimeout(function () {
+            $('.success').fadeOut(3000);
+        }, 4000);
+    });
+}
+
+function showWarning(text) {
+    $(".warning").fadeIn("fast", function () {
+        $(".warning").html(text);
+        setTimeout(function () {
+            $('.warning').fadeOut(3000);
+        }, 4000);
+    });
+}
+
+function showError(text) {
+    $(".error").fadeIn("fast", function () {
+        $(".error").html(text);
+        setTimeout(function () {
+            $('.error').fadeOut(3000);
+        }, 4000);
+    });
+}
 

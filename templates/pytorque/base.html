@@ -1,14 +1,20 @@
+{% load i18n %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <link type="text/css" rel="stylesheet" media="all" href="{{MEDIA_URL}}css/styles.css"/>
-    <link type="text/css" rel="stylesheet" href="{{MEDIA_URL}}css/treegrid.css"/>
-    <script src="{{MEDIA_URL}}js/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="{{MEDIA_URL}}js/jquery.jstree.js" type="text/javascript"></script>
-    <script src="{{MEDIA_URL}}js/jstreegrid.js" type="text/javascript"></script>
-    <script src="{{MEDIA_URL}}js/lavalamp.js" type="text/javascript"></script>
-    <script src="{{MEDIA_URL}}js/commonFunctions.js" type="text/javascript"></script>
+    <link type="text/css" rel="stylesheet" media="all" href="/media/css/styles.css"/>
+{#    <link type="text/css" rel="stylesheet" href="/media/css/treegrid.css"/>#}
+    <link type="text/css" rel="stylesheet" href="/media/jtable_themes/themes/standard/blue/jtable_blue.css" />
+    <link type="text/css" rel="stylesheet" href="/media/css/jquery-ui-1.8.18.custom.css" />
+
+    <script src="/media/js/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="/media/js/jquery.jstree.js" type="text/javascript"></script>
+    <script src="/media/js/jstreegrid.js" type="text/javascript"></script>
+    <script src="/media/js/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
+    <script src="/media/js/jquery.jtable.js" type="text/javascript"></script>
+    <script src="/media/js/lavalamp.js" type="text/javascript"></script>
+    <script src="/media/js/commonFunctions.js" type="text/javascript"></script>
     {% block header %}
         <title>{% block title %}PyTorque{% endblock %}</title>
     {% endblock %}
@@ -21,11 +27,22 @@
     <div id="header" class="center outer_block">
         <div class="lavalamp">
             <ul>
-                <li class="active"><a href="">Home</a></li>
+                <li class="active"><a href="/">Home</a></li>
                 <li><a href="/browse">Browse home directory</a></li>
                 <li><a href="/monitor">Monitoring</a></li>
                 <li><a href="/submit">Submition</a></li>
                 <li><a href="/stat">Statistics</a></li>
+                <!-- Authentication -->
+                <div id="authentication">
+                    {% block login %}
+                        {% if user.is_authenticated %}
+                            <pre>{% trans "Welcome " %}, <strong>{{ user.username }}</strong>. <a href="/logout/">logout</a> / <a
+                                    href="/admin/">admin</a> </pre>
+                        {% else %}
+                            <pre>Welcome, new user. <a href="/login/">login</a> / <a href="/admin/">admin</a> </pre>
+                        {% endif %}
+                    {% endblock %}
+                </div>
             </ul>
             <div class="floatr"></div>
         </div>
@@ -33,37 +50,14 @@
 
     <!-- body -->
     <div id="body" class="center outer_block">
-        <!-- File system browser -->
-        {#        <div id="sidebar">#}
-        {#            {% block sidebar %}#}
-        {##}
-        {#                {% if jsonTree %}#}
-        {##}
-        {#                    <script type="text/javascript">#}
-        {##}
-        {#                        Event.observe(window, "load", function (event) {#}
-        {##}
-        {#                            fileSystemTree = new Brq.TreeTable('{{ jsonTree|escapejs }}'.evalJSON(), $("sidebar"), {#}
-        {#                                columnTitles:[#}
-        {#                                    "Home Directory"#}
-        {#                                ],#}
-        {#                                index:false,#}
-        {#                                zebra:true#}
-        {#                            });#}
-        {#                        });#}
-        {#                    </script>#}
-        {#                {% else %}#}
-        {#                    <div align="center">#}
-        {#                        <b> Home Directory </b>#}
-        {#                    </div>#}
-        {#                {% endif %}#}
-        {#            {% endblock %}#}
-        {#        </div>#}
-        <!-- End file browser -->
-
         <!-- Content -->
         <div id="content">
             {% block content %}{% endblock %}
+
+            <div class="notification info">Info message</div>
+            <div class="notification success">Successful operation message</div>
+            <div class="notification warning">Warning message</div>
+            <div class="notification error">Error message</div>
         </div>
         <!-- END Content -->
     </div>

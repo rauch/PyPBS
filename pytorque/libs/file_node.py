@@ -1,4 +1,4 @@
-# -*- coding: UTF8 -*-
+# -*- coding: utf-8 -*-
 import os
 import jsonpickle
 import time
@@ -105,3 +105,14 @@ if __name__ == "__main__":
     print(time.strftime("%d-%m-%Y %M:%H", time.gmtime(os.path.getmtime("/home/rauch/Diploma"))))
 
     print(jsonpickle.encode(fileNode, unpicklable=False))
+
+    resultJSON = {
+        "Result": "OK",#ERROR could be here -> Message
+        "Records": [
+                {"JobId": 1, "Name": "Benjamin Button", "State": 17, "SubmitDate": "/Date(1320259705710)/"},
+                {"JobId": 2, "Name": "Douglas Adams", "State": 42, "SubmitDate": "/Date(1320259705710)/"},
+                {"JobId": 3, "Name": "Isaac Asimov", "State": 26, "SubmitDate": "/Date(1320259705710)/"},
+                {"JobId": 4, "Name": "Thomas More", "State": 65, "SubmitDate": "/Date(1320259705710)/"}
+        ]
+    }
+    print(jsonpickle.encode(resultJSON))

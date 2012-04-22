@@ -10,11 +10,13 @@ ADMINS = (
 
 MANAGERS = ADMINS
 ROOT_PATH = os.path.dirname(__file__)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 20971520 #20MB
+FILE_UPLOAD_PERMISSIONS = 0600
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/home/rauch/PycharmProjects/PyPBS/db/pypbs.db',                      # Or path to database file if using sqlite3.
+        'NAME': '/home/rauch/PycharmProjects/PyPBS/db/pypbs.sqlite',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -29,11 +31,12 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/Moscow'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
+#LANGUAGE_CODE = 'ru-RU'
 
 SITE_ID = 1
 
@@ -112,7 +115,7 @@ LOGIN_REDIRECT_URL = '/'
 
 TEMPLATE_DIRS = (os.path.join(ROOT_PATH, "templates"),)
 
-AUTH_PROFILE_MODULE = 'PyPBS.UserProfile'
+AUTH_PROFILE_MODULE = 'pytorque.UserProfile'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -126,6 +129,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'PyPBS.pytorque',
+    'south',
 )
 
 # A sample logging configuration. The only tangible logging

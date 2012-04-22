@@ -1,4 +1,5 @@
 import os
+import string
 import urlparse
 from django.core.servers.basehttp import FileWrapper
 from django.utils.translation import ugettext as _
@@ -14,8 +15,13 @@ import logging
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 import jsonpickle
+import time
 from pytorque import strings
+from pytorque.forms import UploadFileForm, SubmitScriptForm
 from pytorque.libs.file_node import FileNode
+from pytorque.libs.torque_service import TorqueService
+from pytorque.libs.upload_handler import UploadHandler
+from pytorque.models import FileObject
 
 import settings
 
@@ -40,8 +46,8 @@ def is_allowed_user(orig_func):
 @login_required
 @is_allowed_user
 def index(request, username=None):
-    username = getpass.getuser()
-    return render_to_response('pytorque/index.html', RequestContext(request, {'userName': username}))
+    return render_to_response('pytorque/index.html',
+        RequestContext(request, {'userName': username, 'py_userName': getpass.getuser()}))
 
 
 def central_dispatch_view(request):
@@ -137,9 +143,8 @@ def logout(request, next_page=None,
 @login_required
 @is_allowed_user
 def browse(request, username=None):
-    userName = request.user.username
     return render_to_response('pytorque/browse.html',
-        RequestContext(request, {'userName': userName}))
+        RequestContext(request, {'userName': username, 'py_userName': getpass.getuser()}))
 
 
 @login_required
@@ -159,58 +164,37 @@ def get_children(request, username=None):
 
     return HttpResponse(resultJSON, content_type="application/json")
 
-#@login_required
-#@is_allowed_user
-#def fileUpload(request):
-#    userName = request.user.username
-#
-#    jsonTree = {}
-#    try:
-#        jsonTree = DirectoryNode.getFileTreeJSON(userName, userPWD)
-#    except errors.ShellException as shExc:
-#        server_logger.error(strings.STR_SHELL_EXCEPTION_MSG % ('getting file tree JSON', str(shExc)))
-#    except errors.ParseException as pExc:
-#        server_logger.error(strings.STR_PARSE_SHELL_EXCEPTION_MSG % ('getting file tree JSON', str(pExc)))
-#
-#    if request.method == 'POST':
-#        form = UploadFileForm(request.POST, request.FILES)
-#        currentDirectory = request.POST.get('currentDirectory')
-#        if form.is_valid():
-#            uploadedFile = request.FILES['file']
-#            fileName = uploadedFile.name
-#            destinationPath = '%s/%s' % (MEDIA_ROOT, fileName)
-#
-#            try:
-#                UploadHandler.handleUploadedFile(destinationPath, uploadedFile)
-#            except Exception as exc:
-#                server_logger.error(
-#                    strings.STR_HANDLE_FILE_EXCEPTION_MSG % ('handling upload file: ' + destinationPath, str(shExc)))
-#
-#            #copies uploaded file to user's selected directory
-#            shellExecutor = ShellCommandExecutor()
-#            try:
-#                resultExecutionDict = shellExecutor.shellCommand(userName, userPWD,
-#                    shellExecutor.STR_CMD_COPY_FILE + destinationPath + " " +\
-#                    currentDirectory + "/" + fileName)
-#            except errors.ShellException as shExc:
-#                server_logger.error(strings.STR_SHELL_EXCEPTION_MSG % ('copying', str(shExc)))
-#                #removes temp file
-#            try:
-#                os.remove(destinationPath)
-#            except OSError as osErr:
-#                server_logger.error(str(shExc))
-#
-#            if resultExecutionDict['success']:
-#                return HttpResponseRedirect('/webtorque/browse')
-#            else:
-#                form = UploadFileForm()
-#                server_logger.error(resultExecutionDict['result'])
-#        else:
-#            form = UploadFileForm()
-#    else:
-#        form = UploadFileForm()
-#    return render_to_response('webtorque/fileUpload.html', RequestContext(request, {'jsonTree': jsonTree, 'form': form,
-#                                                                                    'currentDirectory': currentDirectory}))
+
+@login_required
+@is_allowed_user
+def fileUpload(request, username=None):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        destinationPath = request.POST.get('currentDirectory')
+        if form.is_valid() and destinationPath:
+            uploadedFile = request.FILES['file']
+
+            server_logger.info("User '%s' is trying to upload file: %s" % (username, uploadedFile.name))
+            try:
+                UploadHandler.handle(destinationPath, uploadedFile)
+
+                #                userFile = FileObject(user = request.user, file_name = os.path.join(destinationPath, uploadedFile.name))
+                #                userFile.save()
+
+                FileObject.objects.create(user=request.user, file_name=os.path.join(destinationPath, uploadedFile.name))
+            except Exception as exc:
+                server_logger.error(
+                    strings.STR_HANDLE_FILE_EXCEPTION_MSG % ('uploading file: ' + uploadedFile.name, str(exc)))
+
+            return HttpResponseRedirect('/user/' + username + '/browse')
+
+        else:
+            form = UploadFileForm()
+    else:
+        form = UploadFileForm()
+    return render_to_response('pytorque/upload.html', RequestContext(request, {'userName': username, 'form': form,
+                                                                               'currentDirectory': destinationPath}))
+
 
 @login_required
 @is_allowed_user
@@ -223,13 +207,120 @@ def fileDownload(request, username=None):
             fileToSend = file(fileName, 'r')
 
             wrapper = FileWrapper(fileToSend)
-            response = HttpResponse(wrapper) #, content_type='text/plain')
+            response = HttpResponse(wrapper, content_type="application/force-download")
             response['Content-Length'] = os.path.getsize(fileName)
-            response['Content-Disposition'] = 'attachment; filename=' + fileToSend.name
+            response['Content-Disposition'] = 'attachment; filename=' + fileToSend.name.encode('utf8')
             return response
-        except IOError as ioError:
-            server_logger.error(
-                strings.STR_IO_EXCEPTION_MSG % ("opening file", fileName) + str(ioError))
+        except Exception as exc:
+            server_logger.error(strings.STR_IO_EXCEPTION_MSG % ("opening file " + fileName, str(exc)))
 
-            return HttpResponse("Something goes wrong1!")
-    return HttpResponse("Something goes wrong2!")
+    return render_to_response('pytorque/browse.html', RequestContext(request, {'userName': username}))
+
+
+@login_required
+@is_allowed_user
+def fileRemove(request, username=None):
+    resultDict = {"status": "success", "message": ""}
+
+    if request.POST:
+        itemToRemove = request.POST.get('id')
+        server_logger.info("User '%s' is trying to remove file: %s" % (username, itemToRemove))
+
+        if itemToRemove:
+            if os.path.isfile(itemToRemove):
+                try:
+                    os.remove(itemToRemove)
+                    resultDict["status"] = "success"
+                except Exception as exc:
+                    server_logger.error(strings.STR_HANDLE_FILE_EXCEPTION_MSG % ('removing file', str(exc)))
+                    resultDict["status"] = "error"
+                    resultDict["message"] = (strings.STR_HANDLE_FILE_EXCEPTION_MSG % ('removing file', str(exc)))
+            else:
+                resultDict["status"] = "error"
+                resultDict["message"] = "File could be removed only"
+        else:
+            resultDict["status"] = "error"
+            resultDict["message"] = "Item to remove must be selected"
+    else:
+        resultDict["status"] = "error"
+        resultDict["message"] = "Please, use `post` request"
+
+    resultJSON = jsonpickle.encode(resultDict)
+    return HttpResponse(resultJSON, content_type="application/json")
+
+
+@login_required
+@is_allowed_user
+def monitor(request, username=None):
+    return render_to_response('pytorque/monitor.html',
+        RequestContext(request, {'userName': username}))
+
+
+@login_required
+@is_allowed_user
+def get_jobs(request, username=None):
+    resultJSON = {}
+
+    if request.method == 'POST':
+        jobs = TorqueService.getJobs()
+        resultJSON['Result'] = 'OK'
+        resultJSON['Records'] = jobs
+
+    else:
+        resultJSON['Result'] = 'ERROR'
+        resultJSON['Message'] = 'Use \'POST\' request, please'
+
+    return HttpResponse(jsonpickle.encode(resultJSON, unpicklable=False), content_type="application/json")
+
+
+@login_required
+@is_allowed_user
+def submit(request, username=None):
+    resultJSON = {}
+
+    if request.method == 'POST':
+        form = SubmitScriptForm(request.POST)
+        if form.is_valid():
+            script = {}
+
+            script['jobName'] = form.cleaned_data['jobName']
+            script['queue'] = form.cleaned_data['queueToSubmitJobTo']
+            script['cpuNumber'] = form.cleaned_data['cpuToUse']
+            script['maxTime'] = form.cleaned_data['maxTime']
+            script['sendMessageAbort'] = form.cleaned_data['sendMessageAbort']
+            script['sendMessageEnd'] = form.cleaned_data['sendMessageEnd']
+            script['sendMessageStart'] = form.cleaned_data['sendMessageStart']
+            script['sendMessageTo'] = form.cleaned_data['sendMessageTo']
+            script['executionCommands'] = form.cleaned_data['executionCommands']
+            script['stageInFrom'] = form.cleaned_data['stageInFrom']
+            script['stageInTo'] = form.cleaned_data['stageInTo']
+            script['stageOutFrom'] = form.cleaned_data['stageOutFrom']
+            script['stageOutTo'] = form.cleaned_data['stageOutTo']
+
+            script['scriptName'] = os.path.join('/home/' + username,
+                script['jobName'] + "." + time.strftime("%d.%m.%Y_%H:%M:%S",
+                    time.localtime()) + ".pbs")
+
+            #creates file script
+            try:
+                scriptFile = open(script['scriptName'], 'w', 0744)
+                temp = string.replace(script['executionCommands'], '\r\n', '\n')
+                temp = string.replace(temp, '\r', '\n')
+                scriptFile.write(temp)
+            except Exception as err:
+                server_logger.error(str(err))
+            finally:
+                scriptFile.close()
+
+            result = TorqueService.submitScript(script)
+
+            if result["Result"] == "OK":
+                return HttpResponseRedirect('/user/' + username + '/monitor')
+    else:
+        form = SubmitScriptForm()
+        resultJSON['Result'] = 'ERROR'
+        resultJSON['Message'] = 'Use \'POST\' request, please'
+
+    return render_to_response('pytorque/submit.html',
+        RequestContext(request, {'userName': username, 'form': form}))
+

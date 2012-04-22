@@ -1,13 +1,14 @@
 {% extends "pytorque/base.html" %}
 
 {% block title %}
-    PyTorque
+    PyTorque browsing
 {% endblock %}
 
 {% block content %}
-
     <div class="center">
-        <b>You are: {{ userName }}</b>
+        <br>
+        You are: {{ py_userName }}
+        <br>
 
         <div id="fileTree" class="jstree">
             <script type="text/javascript">
@@ -68,6 +69,18 @@
                                         }
                                     }
                                 },
+                                'sort':function (a, b) {
+                                    if(jQuery(a).attr('rel') == 'folder' && jQuery(b).attr('rel') == 'folder' ||
+                                            jQuery(a).attr('rel') == 'file' && jQuery(b).attr('rel') == 'file') {
+                                        return this.get_text(a) > this.get_text(b) ? 1 : -1;
+                                    } else if (jQuery(a).attr('rel') == 'folder') {
+                                        return -1;
+                                    } else if (jQuery(a).attr('rel') == 'file') {
+                                        return 1;
+                                    }
+
+                                    return this.get_text(a) > this.get_text(b) ? 1 : -1;
+                                },
                                 'contextmenu':{
                                     'items':customMenu
                                 },
@@ -79,14 +92,41 @@
                                     "dots":true,
                                     "icons":true
                                 },
-                                plugins:[ "json_data", "types", "grid", "contextmenu", "crrm", "themes", "ui" ]
+                                plugins:[ "json_data", "types", "grid", "contextmenu", "crrm", "sort", "themes", "ui" ]
                             })/*.bind("select_node.jstree",
-                            function (e, data) {
-                                alert(data.rslt.obj.attr("id"));
-                            })*/;
+                     function (e, data) {
+                     alert(data.rslt.obj.attr("id"));
+                     })*/;
                 });
             </script>
         </div>
+
+        <script type="text/javascript">
+            function removeItem(node) {
+                jQuery.ajax({
+                    type:"POST",
+                    url:"{{ "/user/"|add:userName|add:"/browse/remove"}}",
+                    context:this,
+                    data:{
+                        id:node.attr("id"),
+                        csrfmiddlewaretoken:"{{ csrf_token }}"
+                    },
+                    success:function (data, textStatus, jqXHR) {
+                        if (data.status == "success") {
+                            $.jstree._reference('#fileTree').remove(node);
+                            showSuccess("File successfully removed");
+                        }
+                        else if (data.status == "error") {
+                            showError(data.message);
+                        }
+                    },
+                    error:function (jqXHR, textStatus) {
+                        showError("Something goes wrong");
+                    }
+                });
+            }
+        </script>
+
         <form id="formToUpload" method="post" action="{{ "/user/"|add:userName|add:"/browse/upload"}}">
             {% csrf_token %}
             <input id="currentDirectoryInput" name="currentDirectory" value="" type="hidden"/>

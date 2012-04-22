@@ -13,8 +13,8 @@ urlpatterns = patterns('pytorque.views',
 #    (r'^$', 'central_dispatch_view'),
     (r'^user/(?P<username>\w{0,50})/$', 'index'),
     (r'^user/(?P<username>\w{0,50})/browse$', 'browse'),
-    (r'^user/(?P<username>\w{0,50})/monitor', 'monitor'),
-    (r'^user/(?P<username>\w{0,50})/submit', 'submit'),
-    (r'^user/(?P<username>\w{0,50})/stat', 'stat'),
+#    (r'^user/(?P<username>\w{0,50})/monitor', 'monitor'),
+#    (r'^user/(?P<username>\w{0,50})/submit', 'submit'),
+#    (r'^user/(?P<username>\w{0,50})/stat', 'stat'),
 )
   

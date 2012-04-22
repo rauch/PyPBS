@@ -1,15 +1,28 @@
 {% extends "pytorque/base.html" %}
 
+{% load i18n %}
+
 {% block title %}
     PyTorque
 {% endblock %}
 
 {% block content %}
 
-    <div class="center" style="text-align: center;">
-        <b>You are: {{ userName }}</b>
+    <div class="center">
         <br>
-        Some useful content will go here soon!
+        You are: {{ py_userName }}
+        <br>
+        Welcome to PyTorque, service which exposes an interface for an open source distributed resource manager PBS Torque
+        <br><br>
+        <b>With the service you are able to:</b>
+        <ul>
+            <li>get access to your home directory</li>
+            <li>easy manage files in the home directory</li>
+            <li>submit your own jobs to PBS torque server with equal ease</li>
+            <li>manage jobs without logging into any remote machines. The user may view jobs in queues and delete any of their currently queued or running jobs.</li>
+            <li>monitor queues status</li>
+            <li>do all of this in a secure manner (via SSL)</li>
+        </ul>
     </div>
 
 {% endblock %}

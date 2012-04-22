@@ -1,0 +1,150 @@
+{% extends "pytorque/base.html" %}
+
+{% block title %}
+    PyTorque submition
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="center">
+        <form id="submitScriptForm" enctype="multipart/form-data" method="post"
+              action="{{ "/user/"|add:userName|add:"/submit"}}">{% csrf_token %}
+            {#        {{ form.as_p }}#}
+            {#        <input id="djangoSubmit" type="submit" value="Submit"/>#}
+
+            {{ form.non_field_errors }}
+
+
+            <table id="sumbitScriptFormTable" cellspacing="0" cellpadding="4">
+
+                <tr>
+                    <td>
+                        <div class="fieldWrapper">
+                            <label for="id_jobName" class="H1">Job name:</label><br>
+                            {{ form.jobName }}
+                            {{ form.jobName.errors }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="fieldWrapper">
+                            {{ form.executionCommands.errors }}
+                            <label for="id_executionCommands" class="H1">Execution commands:</label><br>
+                            {{ form.executionCommands }}
+                        </div>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        <label class="H1">Job Options</label>
+                        <table class="jobOptionsTable" cellspacing="10">
+                            <tr>
+                                <td><label for="id_queueToSubmitJobTo" class="H2">Queue to submit job to:</label></td>
+                                <td>{{ form.queueToSubmitJobTo }}</td>
+                            </tr>
+                            <tr>
+                                <td class="empty"></td>
+                                <td>{{ form.queueToSubmitJobTo.errors }}</td>
+                            </tr>
+
+                            <tr>
+                                <td><label for="id_cpuToUse" class="H2">Number of processors to use:</label></td>
+                                <td>{{ form.cpuToUse }}</td>
+                            </tr>
+                            <tr>
+                                <td class="empty"></td>
+                                <td>{{ form.cpuToUse.errors }}</td>
+                            </tr>
+
+                            <tr>
+                                <td><label for="id_maxTime" class="H2">Maximum time (HH:MM:SS):</label></td>
+                                <td>{{ form.maxTime }}</td>
+                            </tr>
+                            <tr>
+                                <td class="empty"></td>
+                                <td>{{ form.maxTime.errors }}</td>
+                            </tr>
+
+                            <tr>
+                                <td><label class="H2">Send message when job:</label></td>
+                                <td><label for="id_sendMessageAbort" class="H3">Aborts:</label>
+                                    {{ form.sendMessageAbort }}
+                                    <label for="id_sendMessageEnd" class="H3">Ends:</label>
+                                    {{ form.sendMessageEnd }}
+                                    <label for="id_sendMessageStart" class="H3">Starts:</label>
+                                    {{ form.sendMessageStart }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><label for="id_sendMessageTo" class="H2">Address to send message to:</label></td>
+                                <td>{{ form.sendMessageTo }}</td>
+                            </tr>
+                            <tr>
+                                <td class="empty"></td>
+                                <td>{{ form.sendMessageTo.errors }}</td>
+                            </tr>
+                        </table>
+                    </td>
+
+                    <td>
+                        <label class="H1">File Staging (data files only; executable automatically staged)</label>
+                        <table class="fileStagingTable">
+                            <tr>
+                                <td colspan="2"><label class="H1">Stagein:</label></td>
+                            </tr>
+
+                            <tr>
+                                <td><label for="id_stageInFrom" class="H2">From here:</label></td>
+                                <td>{{ form.stageInFrom }}</td>
+                            </tr>
+                            <tr>
+                                <td class="empty"></td>
+                                <td>{{ form.stageInFrom.errors }}</td>
+                            </tr>
+
+                            <tr>
+                                <td><label for="id_stageInTo" class="H2">To there:</label></td>
+                                <td>{{ form.stageInTo }}</td>
+                            </tr>
+                            <tr>
+                                <td class="empty"></td>
+                                <td>{{ form.stageInTo.errors }}</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2"><label class="H1">Stageout:</label></td>
+                            </tr>
+
+                            <tr>
+                                <td><label for="id_stageOutFrom" class="H2">From here:</label></td>
+                                <td>{{ form.stageOutFrom }}</td>
+                            </tr>
+                            <tr>
+                                <td class="empty"></td>
+                                <td>{{ form.stageOutFrom.errors }}</td>
+                            </tr>
+
+                            <tr>
+                                <td><label for="id_stageOutTo" class="H2">To there:</label></td>
+                                <td>{{ form.stageOutTo }}</td>
+                            </tr>
+                            <tr>
+                                <td class="empty"></td>
+                                <td>{{ form.stageOutTo.errors }}</td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+            </table>
+
+
+            <p align="center"><input type="submit" value="Submit Script"/></p>
+
+        </form>
+    </div>
+
+{% endblock %}

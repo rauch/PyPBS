@@ -133,13 +133,92 @@ h1, h2 {
     -moz-transition: all .4s ease-in-out;
 }
 
+.upload {
+    position: relative;
+    width: 450px;
+    border-radius: 14px;
+    z-index: 2;
+}
+
 .center {
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
+.center_vertically {
+    display: block;
+    margin-top: auto;
+    margin-bottom: auto;
+
+    text-align: center;
+    vertical-align: middle;
+}
+
 .outer_block {
     width: 900px;
 }
 
+/*notification areas*/
+.info, .success, .warning, .error, .validation {
+    border: 1px solid;
+    margin: 10px 0px;
+    padding: 15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+.notification {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+
+    text-align: center;
+    vertical-align: middle;
+    display: none;
+
+    line-height: 50px;
+    height: 50px;
+    width: 250px;
+}
+
+.info {
+    color: #00529B;
+    background-color: #BDE5F8;
+    background-image: url('../images/info.png');
+}
+
+.success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    background-image: url('../images/success.png');
+}
+
+.warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url('../images/warning.png');
+}
+
+.error {
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('../images/error.png');
+}
+
+.jtable-command-button {
+    display: none !important;
+}
+
+ul.errorlist {
+    margin: 0;
+    padding: 0;
+}
+.errorlist li {
+    background-color: red !important;
+    color: white;
+    display: block;
+    font-size: 10px;
+    margin: 0 0 3px;
+    padding: 4px 5px;
+}
