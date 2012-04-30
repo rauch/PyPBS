@@ -59,7 +59,7 @@ class SubmitScriptForm(forms.Form):
 
     #Execution Commands
     executionCommands = forms.CharField(label='Execution commands:', required=False, widget=forms.Textarea,
-        initial='echo "Hello world"\npwd \n date \necho "Done"')
+        initial='echo "Hello world"\npwd\ndate\necho "Done"')
 
     #File Staging
     stageInFrom = forms.URLField(label='From here:', required=False)

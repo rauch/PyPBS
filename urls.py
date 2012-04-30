@@ -36,5 +36,5 @@ urlpatterns = patterns('',
     (r'^user/(?P<username>\w{0,50})/monitor$', 'pytorque.views.monitor'),
     (r'^user/(?P<username>\w{0,50})/monitor/get_jobs$', 'pytorque.views.get_jobs'),
     (r'^user/(?P<username>\w{0,50})/submit$', 'pytorque.views.submit'),
-#    (r'^user/(?P<username>\w{0,50})/stat', 'pytorque.views.stat'),
+    (r'^user/(?P<username>\w{0,50})/stat$', 'pytorque.views.stat'),
 )

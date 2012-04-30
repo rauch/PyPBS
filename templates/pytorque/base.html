@@ -4,9 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <link type="text/css" rel="stylesheet" media="all" href="/media/css/styles.css"/>
-{#    <link type="text/css" rel="stylesheet" href="/media/css/treegrid.css"/>#}
-    <link type="text/css" rel="stylesheet" href="/media/jtable_themes/themes/standard/blue/jtable_blue.css" />
-    <link type="text/css" rel="stylesheet" href="/media/css/jquery-ui-1.8.18.custom.css" />
+    {#    <link type="text/css" rel="stylesheet" href="/media/css/treegrid.css"/>#}
+    <link type="text/css" rel="stylesheet" href="/media/jtable_themes/themes/standard/blue/jtable_blue.css"/>
+    <link type="text/css" rel="stylesheet" href="/media/css/jquery-ui-1.8.18.custom.css"/>
 
     <script src="/media/js/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="/media/js/jquery.jstree.js" type="text/javascript"></script>
@@ -17,6 +17,7 @@
     <script src="/media/js/commonFunctions.js" type="text/javascript"></script>
     {% block header %}
         <title>{% block title %}PyTorque{% endblock %}</title>
+        {% block additionalHeadContent %}{% endblock %}
     {% endblock %}
 </head>
 
@@ -36,7 +37,8 @@
                 <div id="authentication">
                     {% block login %}
                         {% if user.is_authenticated %}
-                            <pre>{% trans "Welcome " %}, <strong>{{ user.username }}</strong>. <a href="/logout/">logout</a> / <a
+                            <pre>{% trans "Welcome " %}, <strong>{{ user.username }}</strong>. <a
+                                    href="/logout/">logout</a> / <a
                                     href="/admin/">admin</a> </pre>
                         {% else %}
                             <pre>Welcome, new user. <a href="/login/">login</a> / <a href="/admin/">admin</a> </pre>
@@ -53,6 +55,20 @@
         <!-- Content -->
         <div id="content">
             {% block content %}{% endblock %}
+
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    var errMsg = "{{ errorMessage }}";
+                    if (errMsg) {
+                        showError(errMsg)
+                    }
+
+                    var infMsg = "{{ infoMessage }}";
+                    if (infMsg) {
+                        showInfo(infMsg)
+                    }
+                });
+            </script>
 
             <div class="notification info">Info message</div>
             <div class="notification success">Successful operation message</div>

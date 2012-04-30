@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import os
 import string
 import urlparse
@@ -18,6 +19,7 @@ import jsonpickle
 import time
 from pytorque import strings
 from pytorque.forms import UploadFileForm, SubmitScriptForm
+from pytorque.libs.charts import ChartGenerator
 from pytorque.libs.file_node import FileNode
 from pytorque.libs.torque_service import TorqueService
 from pytorque.libs.upload_handler import UploadHandler
@@ -159,8 +161,11 @@ def get_children(request, username=None):
         else:
             nodeId = "/home/" + username
 
-        fileNode = FileNode.createDirectoryNode(nodeId)
-        resultJSON = jsonpickle.encode(fileNode, unpicklable=False)
+        try:
+            fileNode = FileNode.createDirectoryNode(nodeId)
+            resultJSON = jsonpickle.encode(fileNode, unpicklable=False)
+        except Exception as exc:
+            server_logger.error(exc)
 
     return HttpResponse(resultJSON, content_type="application/json")
 
@@ -168,6 +173,7 @@ def get_children(request, username=None):
 @login_required
 @is_allowed_user
 def fileUpload(request, username=None):
+    errorMessage = ''
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         destinationPath = request.POST.get('currentDirectory')
@@ -185,6 +191,7 @@ def fileUpload(request, username=None):
             except Exception as exc:
                 server_logger.error(
                     strings.STR_HANDLE_FILE_EXCEPTION_MSG % ('uploading file: ' + uploadedFile.name, str(exc)))
+                errorMessage = str(exc)
 
             return HttpResponseRedirect('/user/' + username + '/browse')
 
@@ -193,12 +200,14 @@ def fileUpload(request, username=None):
     else:
         form = UploadFileForm()
     return render_to_response('pytorque/upload.html', RequestContext(request, {'userName': username, 'form': form,
-                                                                               'currentDirectory': destinationPath}))
+                                                                               'currentDirectory': destinationPath,
+                                                                               'errorMessage': errorMessage}))
 
 
 @login_required
 @is_allowed_user
 def fileDownload(request, username=None):
+    errorMessage = ''
     if request.method == 'POST':
         fileName = request.POST.get('currentFile')
         server_logger.info("User '%s' is trying to download file: %s" % (username, fileName))
@@ -213,8 +222,10 @@ def fileDownload(request, username=None):
             return response
         except Exception as exc:
             server_logger.error(strings.STR_IO_EXCEPTION_MSG % ("opening file " + fileName, str(exc)))
+            errorMessage = str(exc)
 
-    return render_to_response('pytorque/browse.html', RequestContext(request, {'userName': username}))
+    return render_to_response('pytorque/browse.html', RequestContext(request, {'userName': username,
+                                                                               'errorMessage = None': errorMessage}))
 
 
 @login_required
@@ -262,9 +273,12 @@ def get_jobs(request, username=None):
     resultJSON = {}
 
     if request.method == 'POST':
-        jobs = TorqueService.getJobs()
-        resultJSON['Result'] = 'OK'
-        resultJSON['Records'] = jobs
+        try:
+            jobs = TorqueService.getJobs()
+            resultJSON['Result'] = 'OK'
+            resultJSON['Records'] = jobs
+        except Exception as exc:
+            server_logger.error(exc)
 
     else:
         resultJSON['Result'] = 'ERROR'
@@ -302,8 +316,8 @@ def submit(request, username=None):
                     time.localtime()) + ".pbs")
 
             #creates file script
+            scriptFile = open(script['scriptName'], 'w', 0744)
             try:
-                scriptFile = open(script['scriptName'], 'w', 0744)
                 temp = string.replace(script['executionCommands'], '\r\n', '\n')
                 temp = string.replace(temp, '\r', '\n')
                 scriptFile.write(temp)
@@ -324,3 +338,31 @@ def submit(request, username=None):
     return render_to_response('pytorque/submit.html',
         RequestContext(request, {'userName': username, 'form': form}))
 
+
+@login_required
+@is_allowed_user
+def stat(request, username=None):
+    errorMessage = ''
+
+    currentTime = datetime.now()
+    jobsTitle = 'Server statistics: [%s - %s] %s' % (
+        (currentTime - timedelta(hours=+2)).strftime('%H:%M'),
+        currentTime.strftime('%H:%M'), currentTime.strftime('%d-%m-%Y'))
+    try:
+        jobsChart = ChartGenerator.getJobStatChart(jobsTitle, currentTime)
+    except Exception as exc:
+        jobsChart = None
+        errorMessage = str(exc)
+        server_logger.error(exc)
+
+    usersTitle = 'Server statistics: all time'
+    try:
+        usersChart = ChartGenerator.getUserStatChart(usersTitle, currentTime)
+    except Exception as exc:
+        usersChart = None
+        errorMessage = str(exc)
+        server_logger.error(exc)
+
+    return render_to_response('pytorque/stat.html',
+        RequestContext(request,
+                {'userName': username, 'stat_charts': [jobsChart, usersChart], 'errorMessage': errorMessage}))

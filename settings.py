@@ -6,7 +6,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Kozyntsev Alexander', 'kozyncev@gmail.com'),
-)
+    )
 
 MANAGERS = ADMINS
 ROOT_PATH = os.path.dirname(__file__)
@@ -15,12 +15,13 @@ FILE_UPLOAD_PERMISSIONS = 0600
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/home/rauch/PycharmProjects/PyPBS/db/pypbs.sqlite',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',
+        # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '/home/rauch/PycharmProjects/PyPBS/db/pypbs.sqlite', # Or path to database file if using sqlite3.
+        'USER': '', # Not used with sqlite3.
+        'PASSWORD': '', # Not used with sqlite3.
+        'HOST': '', # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '', # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -74,9 +75,9 @@ ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+# Put strings here, like "/home/html/static" or "C:/www/django/static".
+# Always use forward slashes, even on Windows.
+# Don't forget to use absolute paths, not relative paths.
 )
 
 # List of finder classes that know how to find static files in
@@ -84,8 +85,8 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    )
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'd)d(mus$c9*@3w6-y1+_-lqc#6#2k=xv_g1#yrsjwewq&-pg!x'
@@ -94,8 +95,8 @@ SECRET_KEY = 'd)d(mus$c9*@3w6-y1+_-lqc#6#2k=xv_g1#yrsjwewq&-pg!x'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
+    #     'django.template.loaders.eggs.Loader',
+    )
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -103,11 +104,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-)
+    )
 
 ROOT_URLCONF = 'PyPBS.urls'
 
-FORCE_SCRIPT_NAME=''
+FORCE_SCRIPT_NAME = ''
 
 #LOGIN_URL = '/pytorque/login'
 #LOGOUT_URL = '/pytorque/logout'
@@ -130,7 +131,8 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'PyPBS.pytorque',
     'south',
-)
+    'chartit',
+    )
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -147,35 +149,35 @@ LOGGING = {
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
-    },
+        },
     'handlers': {
         'null': {
-            'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
-        },
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
+            },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
-        'file':{
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
             'filename': os.path.join(ROOT_PATH, 'logs/pytorque.log'),
-            'maxBytes':'1024',
+            'maxBytes': '1024',
             'backupCount': '3',
-        },
+            },
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
-        }
+            }
     },
     'loggers': {
         'django': {
-            'handlers':['null'],
+            'handlers': ['null'],
             'propagate': True,
-            'level':'INFO',
+            'level': 'INFO',
             },
         'django.request': {
             'handlers': ['mail_admins'],
@@ -185,6 +187,6 @@ LOGGING = {
         'pytorque.custom': {
             'handlers': ['console', 'file', 'mail_admins'],
             'level': 'INFO',
-        }
+            }
     }
 }

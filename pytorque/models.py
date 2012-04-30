@@ -83,3 +83,10 @@ class PBSJob(models.Model):
     resource_mem = models.CharField(default='', max_length=20, blank=True, null=True)
     resource_vmem = models.CharField(default='', max_length=20, blank=True, null=True)
     resource_walltime = models.CharField(default='', max_length=20, blank=True, null=True)
+
+
+class PBSUserStat(models.Model):
+    time = models.DateTimeField(default=datetime.now, auto_now_add=True)
+
+    username = models.CharField(default='', max_length=100, blank=True, null=True)
+    jobCount = models.IntegerField(default=0, blank=True, null=True)

@@ -1,0 +1,160 @@
+.HeaderStyle {
+    height: 5%;
+    table-layout: fixed;
+    border-Collapse: collapse;
+    border-Spacing: 0px;
+}
+
+.HeaderStyle caption {
+    width: 100%;
+    height: 26px;
+    line-height: 26px;
+    font-size: 20px;
+    font-color: black;
+    font-weight: 900;
+    letter-spacing: 5px;
+}
+
+.HeaderStyle thead td {
+    text-align: center;
+    vertical-align: middle;
+    height: 26px;
+/ / width : fixed;
+    line-height: 22px;
+    font-size: 14px;
+    font-color: black;
+    font-weight: bold;
+    padding-top: 0px;
+    padding-bottom: 2px;
+    border: #555 1px solid;
+    margin: 0px;
+}
+
+.HeaderStyle tfoot td {
+    text-align: left;
+    vertical-align: middle;
+    height: 20px;
+    line-height: 18px;
+    font-size: 12px;
+    font-color: black;
+    font-weight: bold;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border: #555 1px solid;
+}
+
+.HeaderStyle tbody td {
+/ / width : fixed;
+    width: 100%;
+    height: auto;
+    border: #555 1px solid;
+    padding: 0px;
+    margin: 0px;
+}
+
+.HeaderStyle tbody td {
+    text-align: left;
+    vertical-align: middle;
+    height: 20px;
+    line-height: 18px;
+    font-size: 14px;
+    font-color: #444;
+    font-weight: normal;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-right: #555 1px solid;
+    border-bottom: #555 1px solid;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+    word-wrap: normal;
+}
+
+.BodyStyle {
+    height: 90%;
+}
+
+.BodyStyle caption {
+    width: 100%;
+    height: 26px;
+    line-height: 26px;
+    font-size: 20px;
+    font-color: black;
+    font-weight: 900;
+    letter-spacing: 5px;
+}
+
+.BodyStyle thead td {
+    text-align: center;
+    vertical-align: middle;
+    height: 20px;
+    line-height: 18px;
+    font-size: 14px;
+    font-color: black;
+    font-weight: bold;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border: #555 1px solid;
+    margin: 0px;
+}
+
+.BodyStyle tfoot td {
+    text-align: left;
+    vertical-align: middle;
+    height: 20px;
+    line-height: 18px;
+    font-size: 12px;
+    font-color: black;
+    font-weight: bold;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border: #555 1px solid;
+}
+
+.BodyStyle tbody td {
+    width: 100%;
+    height: auto;
+    border: #555 1px solid;
+    padding: 0px;
+    margin: 0px;
+}
+
+.BodyStyle tbody td {
+    text-align: left;
+    vertical-align: middle;
+    height: 20px;
+    line-height: 18px;
+    font-size: 14px;
+    font-color: #444;
+    font-weight: normal;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-right: #555 1px solid;
+    border-bottom: #555 1px solid;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+    word-wrap: normal;
+}
+
+.TreeGridHref {
+    text-decoration: none;
+}
+
+.TRSeled td {
+    background-color: #FFFF00;
+    color: black;
+}
+
+.TRUnseled td {
+    background-color: #FFFFFF;
+    color: black;
+}

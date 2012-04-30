@@ -3,6 +3,7 @@ from datetime import  datetime
 
 from PBSQuery import PBSQuery, PBSError
 import time
+from django.contrib.auth.models import User
 import pbs
 from pytorque.models import PBSServer, PBSQueue, PBSJob
 
@@ -218,7 +219,7 @@ class TorqueService():
                 except KeyError:
                     pass
                 try:
-                    customJob.state = TorqueService._listToStr(pbsJob[pbs.ATTR_status], '|')
+                    customJob.state = TorqueService._listToStr(pbsJob[pbs.ATTR_state], '|')
                 except KeyError:
                     pass
                 try:
@@ -327,12 +328,9 @@ if __name__ == "__main__":
 #            print queue.name
 #            print queue
 
-    pQuery = PBSQuery()
-    attr = list()
-    attr.append(pbs.ATTR_used)
-    jobs = pQuery.getjobs(attr)
-    #    for jobName, job in jobs.items():
-    #        jobDate = datetime.fromtimestamp(TorqueService._listToInt(job[pbs.ATTR_start_time]))
-    #        print jobDate
-    #        print time.localtime(int(job['start_time'][0]))
-    print(jobs.items())
+    pQuery = User.objects.raw('SELECT auth_user.*, COUNT(DISTINCT pytorque_pbsjob.jobId) as jobCount FROM pytorque_pbsjob, auth_user\
+                               WHERE pytorque_pbsjob.user_id = auth_user.id\
+                               GROUP BY auth_user.username')
+
+    for p in pQuery:
+        print(p.username,p.jobCount)
