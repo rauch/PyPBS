@@ -225,7 +225,7 @@ def fileDownload(request, username=None):
             errorMessage = str(exc)
 
     return render_to_response('pytorque/browse.html', RequestContext(request, {'userName': username,
-                                                                               'errorMessage = None': errorMessage}))
+                                                                               'errorMessage': errorMessage}))
 
 
 @login_required
@@ -290,7 +290,7 @@ def get_jobs(request, username=None):
 @login_required
 @is_allowed_user
 def submit(request, username=None):
-    resultJSON = {}
+    errorMessage = ''
 
     if request.method == 'POST':
         form = SubmitScriptForm(request.POST)
@@ -316,27 +316,31 @@ def submit(request, username=None):
                     time.localtime()) + ".pbs")
 
             #creates file script
-            scriptFile = open(script['scriptName'], 'w', 0744)
+            scriptFile = None
             try:
+                scriptFile = open(script['scriptName'], 'w', 0744)
                 temp = string.replace(script['executionCommands'], '\r\n', '\n')
                 temp = string.replace(temp, '\r', '\n')
                 scriptFile.write(temp)
             except Exception as err:
                 server_logger.error(str(err))
+                errorMessage = str(err)
             finally:
-                scriptFile.close()
+                if scriptFile is not None:
+                    scriptFile.close()
 
             result = TorqueService.submitScript(script)
 
             if result["Result"] == "OK":
                 return HttpResponseRedirect('/user/' + username + '/monitor')
+            else:
+                server_logger.error(str(result['Message']))
+                errorMessage = str(result['Message'])
     else:
         form = SubmitScriptForm()
-        resultJSON['Result'] = 'ERROR'
-        resultJSON['Message'] = 'Use \'POST\' request, please'
 
     return render_to_response('pytorque/submit.html',
-        RequestContext(request, {'userName': username, 'form': form}))
+        RequestContext(request, {'userName': username, 'form': form, 'errorMessage': errorMessage}))
 
 
 @login_required
