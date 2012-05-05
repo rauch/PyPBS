@@ -1,1 +1,9 @@
-This file was created by PyCharm 2.0.1 for binding GitHub repository
+Welcome to PyTorque, service which exposes an interface for an open source distributed resource manager PBS Torque
+
+With the service you are able to:
+ - get access to your home directory
+ - easy manage files in the home directory
+ - submit your own jobs to PBS torque server with equal ease
+ - manage jobs without logging into any remote machines. The user may view jobs in queues and delete any of their currently queued or running jobs.
+ - monitor queues status
+ - do all of this in a secure manner (via SSL)

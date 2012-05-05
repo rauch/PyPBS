@@ -1,7 +1,7 @@
 # Django settings for PyPBS project.
 import os
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -17,7 +17,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/home/rauch/PycharmProjects/PyPBS/db/pypbs.sqlite', # Or path to database file if using sqlite3.
+        'NAME': '/var/www/gt14.phys.spbu.ru/PyPBS/db/pypbs.sqlite', # Or path to database file if using sqlite3.
         'USER': '', # Not used with sqlite3.
         'PASSWORD': '', # Not used with sqlite3.
         'HOST': '', # Set to empty string for localhost. Not used with sqlite3.
@@ -57,6 +57,8 @@ MEDIA_ROOT = os.path.join(ROOT_PATH, "media")
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
+
+CHARTIT_JS_REL_PATH = '/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files

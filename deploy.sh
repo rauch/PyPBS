@@ -19,4 +19,7 @@ echo "Changing rwx rights..."
 chown -R rauch:rauch /var/www/gt14.phys.spbu.ru/PyPBS
 
 echo "Allowing everyone's logging"
-chmod 666 /var/www/gt14.phys.spbu.ru/PyPBS/logs/pytorque.log 
+chmod 666 /var/www/gt14.phys.spbu.ru/PyPBS/logs/pytorque.log
+
+echo "Allowing everyone read/write DB: test"
+chmod 666 /var/www/gt14.phys.spbu.ru/PyPBS/db/pypbs.sqlite 
