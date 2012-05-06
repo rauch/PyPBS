@@ -65,6 +65,23 @@ class TorqueService():
         return dict
 
     @staticmethod
+    def _splitResourcesList(sourceList):
+        sourceStr = ''
+        for entry in sourceList:
+            sourceStr += entry
+
+        try:
+            resources = sourceStr.split(':')
+            usedNodes = resources[0]
+            usedCpus = resources[1].split('=')[1]
+            return usedNodes + '/' + usedCpus
+        except Exception as exc:
+            print(exc)
+
+        return ''
+
+
+    @staticmethod
     def getJobs():
         resultJobs = []
         p = PBSQuery()
@@ -94,8 +111,7 @@ class TorqueService():
                 except KeyError:
                     pass
                 try:
-                    customJob.n_p = TorqueService._listToStr(pbsJob[pbs.ATTR_l]['neednodes'], '|') + '/' +\
-                                    TorqueService._listToStr(pbsJob[pbs.ATTR_l]['nodes'], '|')
+                    customJob.n_p = TorqueService._splitResourcesList(pbsJob[pbs.ATTR_l]['nodes'])
                 except KeyError:
                     pass
                 try:
@@ -299,17 +315,17 @@ class TorqueService():
             #
             attropl[3].name = pbs.ATTR_l
             attropl[3].resource = 'nodes'
-            attropl[3].value = str(script['cpuNumber']) if script['cpuNumber'] else '1'
+            attropl[3].value = '1:ppn=' + str(script['cpuNumber']) if script['cpuNumber'] else '1'
 
 
             # A1.tsk is the job script filename
             #
-            job_id = pbs.pbs_submit(pbs_connection, attropl, str(script['scriptName']), '', 'NULL')
+            job_id = pbs.pbs_submit(pbs_connection, attropl, str(script['scriptName']), str(script['queue']), 'NULL')
 
             e, e_txt = pbs.error()
             if e:
                 result['Result'] = 'ERROR'
-                result['Message'] = e_txt
+                result['Message'] = str(e) + ' : ' + e_txt
             else:
                 result['Result'] = 'OK'
                 result['Message'] = job_id

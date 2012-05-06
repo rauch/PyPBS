@@ -55,7 +55,7 @@ class ChartGenerator():
             series=
             [{'options': {
                 'source': PBSUserStat.objects.filter(
-                    time__gte=(lastUserStatTime - timedelta(minutes=+9))) #.order_by('-time')
+                    time__gte=(lastUserStatTime - timedelta(minutes=+4))) #.order_by('-time')
             },
               'terms': [
                   'username',

@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block title %}
-    PyTorque statistic
+    PyTorque statistics
 {% endblock %}
 
 {% block additionalHeadContent %}
@@ -12,6 +12,15 @@
 
     {% load chartit %}
     {{ stat_charts|load_charts:"chart_container_time,chart_container_user" }}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.each(_chartit_hco_array, function (index, chartoptions) {
+                chart = new Highcharts.Chart(chartoptions);
+            });
+        });
+    </script>
+
 {% endblock %}
 
 {% block content %}

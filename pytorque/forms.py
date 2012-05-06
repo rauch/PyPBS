@@ -36,7 +36,8 @@ class SubmitScriptForm(forms.Form):
     #        model = SubmitScript
 
 
-    QUEUES_CHOICES = (('1', 'batch'), ('2', 'custom'))
+    QUEUES_CHOICES = (('batch', 'batch'), ('custom', 'custom'))
+    CPU_CNT_CHOICES = (('1', '1'), ('2', '2'), ('3','3'), ('4', '4'))
 
     #Job Name
     jobName = forms.CharField(validators=[RegexValidator, MaxLengthValidator, validate_job_name], initial='new_job',
@@ -47,9 +48,10 @@ class SubmitScriptForm(forms.Form):
 
     #Job Options
     #todo: get it from Model
-    queueToSubmitJobTo = forms.ChoiceField(label='Queue to submit job to:', choices=QUEUES_CHOICES, initial='1')
+    queueToSubmitJobTo = forms.ChoiceField(label='Queue to submit job to:', choices=QUEUES_CHOICES, initial='batch')
 
-    cpuToUse = forms.IntegerField(label='Number of\n processors to use:', initial=1)
+    cpuToUse = forms.ChoiceField(label='Number of\n processors to use:', choices=CPU_CNT_CHOICES, initial='1')
+
     maxTime = forms.TimeField(label='Maximum time\n(HH:MM:SS)', initial='01:00:00')
     sendMessageAbort = forms.BooleanField(label='Aborts', initial=False, required=False)
     sendMessageEnd = forms.BooleanField(label='Ends', initial=False, required=False)
@@ -59,7 +61,7 @@ class SubmitScriptForm(forms.Form):
 
     #Execution Commands
     executionCommands = forms.CharField(label='Execution commands:', required=False, widget=forms.Textarea,
-        initial='echo "Hello world"\npwd\ndate\necho "Done"')
+        initial='echo "Hello world"\npwd\ndate\nsleep 301\ndate\necho "Done"')
 
     #File Staging
     stageInFrom = forms.URLField(label='From here:', required=False)
