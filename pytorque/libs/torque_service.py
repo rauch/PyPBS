@@ -28,8 +28,6 @@ class Job():
     def setQueued(self, queuedTime):
         self.queued = time.strftime(self.__datetime_format, time.localtime(int(queuedTime)))
 
-    #        self.queued = "/Date(" + str(1000 * int(queuedTime)) + ")/"
-
     def setStarted(self, startedTime):
         self.started = time.strftime(self.__datetime_format, time.localtime(int(startedTime)))
 
@@ -178,8 +176,6 @@ class TorqueService():
             queues = pQuery.getqueues()
             for queueName, pbsQueue in queues.items():
                 customQueue = PBSQueue(server=pbsServer, name=queueName)
-                #                customQueue.server=pbsServer
-                #                customQueue.name=queueName
                 try:
                     customQueue.type = TorqueService._listToStr(pbsQueue['queue_type'], '|')
                 except KeyError:
@@ -349,4 +345,4 @@ if __name__ == "__main__":
                                GROUP BY auth_user.username')
 
     for p in pQuery:
-        print(p.username,p.jobCount)
+        print(p.username, p.jobCount)

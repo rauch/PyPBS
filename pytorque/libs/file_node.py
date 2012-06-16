@@ -17,7 +17,6 @@ class Metadata():
 
 
 class FileNode():
-    __kilo = 1024
     __datetime_format = "%d-%m-%Y  %H:%M"
     children = []
     _fullName = None

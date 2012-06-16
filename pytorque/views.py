@@ -287,6 +287,27 @@ def get_jobs(request, username=None):
     return HttpResponse(jsonpickle.encode(resultJSON, unpicklable=False), content_type="application/json")
 
 
+def __handleForm(form, username):
+    script = {}
+    script['jobName'] = form.cleaned_data['jobName']
+    script['queue'] = form.cleaned_data['queueToSubmitJobTo']
+    script['cpuNumber'] = form.cleaned_data['cpuToUse']
+    script['maxTime'] = form.cleaned_data['maxTime']
+    script['sendMessageAbort'] = form.cleaned_data['sendMessageAbort']
+    script['sendMessageEnd'] = form.cleaned_data['sendMessageEnd']
+    script['sendMessageStart'] = form.cleaned_data['sendMessageStart']
+    script['sendMessageTo'] = form.cleaned_data['sendMessageTo']
+    script['executionCommands'] = form.cleaned_data['executionCommands']
+    script['stageInFrom'] = form.cleaned_data['stageInFrom']
+    script['stageInTo'] = form.cleaned_data['stageInTo']
+    script['stageOutFrom'] = form.cleaned_data['stageOutFrom']
+    script['stageOutTo'] = form.cleaned_data['stageOutTo']
+    script['scriptName'] = os.path.join('/home/' + username,
+        script['jobName'] + "." + time.strftime("%d.%m.%Y_%H:%M:%S",
+            time.localtime()) + ".pbs")
+    return script
+
+
 @login_required
 @is_allowed_user
 def submit(request, username=None):
@@ -295,25 +316,7 @@ def submit(request, username=None):
     if request.method == 'POST':
         form = SubmitScriptForm(request.POST)
         if form.is_valid():
-            script = {}
-
-            script['jobName'] = form.cleaned_data['jobName']
-            script['queue'] = form.cleaned_data['queueToSubmitJobTo']
-            script['cpuNumber'] = form.cleaned_data['cpuToUse']
-            script['maxTime'] = form.cleaned_data['maxTime']
-            script['sendMessageAbort'] = form.cleaned_data['sendMessageAbort']
-            script['sendMessageEnd'] = form.cleaned_data['sendMessageEnd']
-            script['sendMessageStart'] = form.cleaned_data['sendMessageStart']
-            script['sendMessageTo'] = form.cleaned_data['sendMessageTo']
-            script['executionCommands'] = form.cleaned_data['executionCommands']
-            script['stageInFrom'] = form.cleaned_data['stageInFrom']
-            script['stageInTo'] = form.cleaned_data['stageInTo']
-            script['stageOutFrom'] = form.cleaned_data['stageOutFrom']
-            script['stageOutTo'] = form.cleaned_data['stageOutTo']
-
-            script['scriptName'] = os.path.join('/home/' + username,
-                script['jobName'] + "." + time.strftime("%d.%m.%Y_%H:%M:%S",
-                    time.localtime()) + ".pbs")
+            script = __handleForm(form, username)
 
             #creates file script
             scriptFile = None

@@ -12,7 +12,7 @@ class ChartGenerator():
         DataPool(
             series=
             [{'options': {
-                'source': PBSServer.objects.filter(time__gte=(currentTime - timedelta(hours=+2)))},
+                'source': PBSServer.objects.order_by('-time')[:20] }, #filter(time__gte=(currentTime - timedelta(hours=+2)))},
               #order_by('time')[9:]
               'terms': [
                   ('time', lambda d: time.mktime(d.timetuple())),
